@@ -28,16 +28,17 @@ function OCRComponent() {
     };
 
     const downloadWordDocument = () => {
-        const blob = new Blob([extractedText], { type: 'text/plain' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = customFileName + '.txt';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-    };
+      const blob = new Blob([extractedText], { type: 'application/msword' }); // Set MIME type to .doc
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = customFileName + '.doc'; // Set file name with .doc extension
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+  };
+  
 
     return (
         <div className="container">
@@ -52,7 +53,7 @@ function OCRComponent() {
             </div>
             <div className="button-container">
                 <button onClick={performOCR} disabled={!imageFile}>Extract Text</button>
-                <button onClick={downloadWordDocument} disabled={!extractedText || !customFileName}>Download Text</button>
+                <button onClick={downloadWordDocument} disabled={!extractedText || !customFileName}>Download Text (.doc)</button>
             </div>
             <div className="result-container">
                 <textarea value={extractedText} readOnly />
